@@ -1,0 +1,13 @@
+// index.scss
+@import 'pages/error';
+
+// Define custom variables before importing Bootstrap
+$primary: #ff5733; // Custom primary color
+
+// Import Bootstrap's SCSS files using the alias
+@import "@bootstrap/bootstrap";
+
+// Add your custom styles after importing Bootstrap
+body {
+  background-color: #f8f9fa;
+}
