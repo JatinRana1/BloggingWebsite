@@ -10,14 +10,9 @@ interface LoginData {
 }
 
 interface LoginResponse {
-  token: string;
-  userData: {
-    id: number;
-    email: string;
-    name: string;
-  }
+  loginStatus: string;
 }
 
-export const login = async (data: LoginData): Promise<LoginResponse> => {
-  return ( await api.post<LoginResponse>('login', data)).data;
-}
+export const login = (data: LoginData, headers: object) => {
+  return api.post<LoginResponse>('/user/login', data, headers);
+} 

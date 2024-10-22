@@ -1,0 +1,14 @@
+// Define the hover-shadow mixin
+@mixin hover-shadow($shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)) {
+    transition: box-shadow 0.3s ease-in-out;
+    &:hover {
+      box-shadow: $shadow !important;
+    }
+  }
+  
+  // Use the mixin in a specific class
+  .form-shadow {
+    @include hover-shadow();
+  }
+
+  

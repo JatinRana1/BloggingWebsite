@@ -4,7 +4,7 @@ import { authSlice } from "../slice/authSlice";
 //create store and adding any reducer
 export const store = configureStore({   
     reducer: {
-        'auth': authSlice.reducer        
+        'auth': authSlice.reducer
     }
 })
 

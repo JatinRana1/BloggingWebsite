@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { routes } from "./router/routes";
 
 const App: React.FC = () => {
+
+  useEffect(()=>{
+    
+})
+
   return (
     <BrowserRouter>
       <Routes>
