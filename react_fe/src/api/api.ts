@@ -10,7 +10,7 @@ interface LoginData {
 }
 
 interface LoginResponse {
-  loginStatus: string;
+  token: string
 }
 
 export const login = (data: LoginData, headers: object) => {

@@ -2,7 +2,7 @@ import { Response, Request } from "express"
 import { User } from "../model/user";
 import bcrypt from "bcrypt";
 import Joi from "joi";
-import jwt from "jsonwebtoken";
+import { tokenService } from "../auth/tokenService";
 
 const loginSchema = Joi.object({
     email: Joi.string().required(),
@@ -26,7 +26,7 @@ export const adminController = {
                 return res.status(404).json({email: "User Not Found"})
             }
 
-            if(user.status > 1){
+            if(user.status != 1){
                 return res.status(403).json({email: "Your Account is Inactive"})
             }
 
@@ -36,29 +36,31 @@ export const adminController = {
                 return res.status(401).json({password: "Invalid credentials"});
             }
 
-            const secretKey = process.env.SECRETKEY || 'your-secret-key';
             
             const payload = {
                 userID: user.id,
                 userName: user.name,
-                userEmail: user.email,
                 userRole: user.role,
                 userTheme: user.theme_preference,
             }
 
-            const token = jwt.sign(payload,secretKey, {
-                expiresIn: '2h',
-            })
+            const {token, refreshToken} = tokenService(payload);
 
-            res.cookie('token', token, {
+            res.cookie('access_token', token, {
                 httpOnly: false,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
                 maxAge: 2 * 60 * 60 * 1000
             });
             
+            res.cookie('refresh_token', refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
 
-            return res.status(200).json({message: 'Authenticated'});
+            return res.status(200).json({token});
 
         } catch (error) {
             console.log(error);

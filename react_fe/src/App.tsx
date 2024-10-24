@@ -4,11 +4,6 @@ import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { routes } from "./router/routes";
 
 const App: React.FC = () => {
-
-  useEffect(()=>{
-    
-})
-
   return (
     <BrowserRouter>
       <Routes>

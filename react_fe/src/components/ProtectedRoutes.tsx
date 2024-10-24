@@ -1,5 +1,6 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ProtectedRoutesProps {
   component: React.ElementType;
@@ -7,11 +8,20 @@ interface ProtectedRoutesProps {
 }
 
 export const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ component: Component, isProtected }) => {
-  const isAuthenticated = false; 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const access_token = Cookies.get('access_token');
+  const authenticated = Boolean(access_token);
 
-  if (isProtected && !isAuthenticated) {
-    return <Navigate to='/login' />;
-  }
+  useEffect(() => {
+    if (isProtected && !authenticated) {
+      navigate('/login', { replace: true });
+    }
+
+    if (authenticated && location.pathname === '/login') {
+      navigate('/', { replace: true });
+    }
+  }, [authenticated, isProtected, location.pathname, navigate]);
 
   return <Component />;
 };
