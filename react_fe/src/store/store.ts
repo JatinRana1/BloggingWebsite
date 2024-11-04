@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authSlice } from "../slice/authSlice";
+import  authSlice  from "../slice/authSlice";
+import  sidebarSlice  from "../slice/sidebarSlice";
 
 //create store and adding any reducer
 export const store = configureStore({   
     reducer: {
-        'auth': authSlice.reducer
+        'auth': authSlice,
+        'sidebar': sidebarSlice,
     }
 })
 

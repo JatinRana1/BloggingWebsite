@@ -1,6 +1,7 @@
-import { Login } from "../pages/authentication/Login"
-import { Home } from "../pages/dashboard/Home"
+import { lazy } from "react"
 import ErrorPage from "../pages/error/ErrorPage"
+const Login = lazy(()=> import("../pages/authentication/Login"));
+const Home = lazy(()=> import("../pages/dashboard/Home"));
 
 interface RouteConfig {
     path: string,

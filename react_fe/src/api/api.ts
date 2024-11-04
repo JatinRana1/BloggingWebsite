@@ -7,6 +7,7 @@ export const api: AxiosInstance = axios.create({
 interface LoginData {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 interface LoginResponse {

@@ -1,0 +1,30 @@
+/* Loader.scss */
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($white, 0.8);
+  z-index: 1050;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+
+  .hourglass-loader {
+    width: 80px;
+    height: 80px;
+    color: $primary;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

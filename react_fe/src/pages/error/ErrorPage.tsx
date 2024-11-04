@@ -1,9 +1,7 @@
-import { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/pages/error.scss';
 import errorSvg from '../../assets/images/error/error.svg';
 
-const ErrorPage = (): ReactElement => {
+const ErrorPage = () => {
   return (
     <div className="error-page d-flex flex-column justify-content-center align-items-center min-vh-100">
       <h1 className="text-secondary">Oops! Page Not Found!</h1>

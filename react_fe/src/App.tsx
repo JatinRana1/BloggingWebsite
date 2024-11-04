@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
+import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Loader } from "./components/Loader";
 import { ProtectedRoutes } from "./components/ProtectedRoutes";
 import { routes } from "./router/routes";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        {routes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<ProtectedRoutes component={route.element} isProtected={route.isProtected} />}
-          />
-        ))}
-      </Routes>
+      <Suspense fallback={<Loader/>}>
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<ProtectedRoutes component={route.element} isProtected={route.isProtected} />}
+            />
+          ))}
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };

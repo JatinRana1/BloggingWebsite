@@ -1,0 +1,31 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 65px;
+    border: 1px $border solid;
+    padding-inline: 18px;
+}
+.navbar .left-side , .right-side {
+    display: flex;
+    justify-content: space-around;
+}
+
+.navbar .right-side div {
+    padding: 8px;
+    align-self: center;
+}
+.navbar .left-side div {
+    padding: 8px;
+    align-self: center;
+}
+.navbar i{
+    display: block;
+}
+.navbar .ham, .search, .notification, .message{
+    color: $grey;
+    transition: all 100ms ease-in-out;
+    &:hover{
+        color: $black;
+    }
+}

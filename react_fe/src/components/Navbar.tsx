@@ -1,40 +1,40 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setVisible } from "../slice/sidebarSlice";
+import { RootState } from "../store/store";
 
-export function Navbar() {
+const Navbar = () => {
+    const dispatch = useDispatch();
+    const isVisible = useSelector((state: RootState)=> state.sidebar.isVisible);
+    const toggleSidebar = () => {
+        dispatch(setVisible({isVisible: !isVisible}))
+    }
     return(
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">Navbar</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
-                    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">Link</a>
-                </li>
-                <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                    </a>
-                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a className="dropdown-item" href="#">Action</a>
-                        <a className="dropdown-item" href="#">Another action</a>
-                        <div className="dropdown-divider"></div>
-                        <a className="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <form className="form-inline my-2 my-lg-0">
-                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+        <div className="navbar col-12">
+            <div className="left-side">
+                <div className="ham" onClick={toggleSidebar}>
+                    <i className="ri-menu-line fs-5"></i>
+                </div>
+                <div className="search">
+                    <i className="ri-search-line"></i>
+                </div>
+            </div>
+            <div className="right-side">
+                <div className="notification">
+                    <i className="ri-notification-2-line"></i>
+                </div>
+                <div className="message">
+                    <i className="ri-chat-4-fill"></i>
+                </div>
+                <div className="profile-pic img-fluid">
+                    <img width={30} height={30} src="https://i.pinimg.com/736x/b8/80/70/b880708681403feb71d634c902b0afdd.jpg" alt="profile-pic" />
+                </div>
+                <div className="user-name">
+                    <span>Jatin Rana</span>
+                </div>
+            </div>
         </div>
-    </nav>
     )
 }
+
+export default Navbar;

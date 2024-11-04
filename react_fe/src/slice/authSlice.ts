@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useEffect } from "react";
 
 interface AuthState {
     userData: object | null;
 }
 
-let initialState: AuthState = {
+const initialState: AuthState = {
     userData: null
 }
 
@@ -13,7 +12,7 @@ interface AuthPayload {
     userData: object | null;
 }
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {

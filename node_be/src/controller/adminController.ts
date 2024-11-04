@@ -6,19 +6,20 @@ import { tokenService } from "../auth/tokenService";
 
 const loginSchema = Joi.object({
     email: Joi.string().required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
+    rememberMe: Joi.boolean(),
 })
 
 export const adminController = {
     login: async (req: Request, res: Response)=>{    
         try {
             const { error, value } = loginSchema.validate(req.body);
-            
+
             if(error){
                 return res.status(400).json({message: error.details[0].message});
             }
 
-            const { email, password } = value;
+            const { email, password, rememberMe } = value;
             
             const user = await User.findOne({email: email});
 
@@ -44,22 +45,24 @@ export const adminController = {
                 userTheme: user.theme_preference,
             }
 
-            const {token, refreshToken} = tokenService(payload);
+            const {token, refreshToken} = tokenService(payload, rememberMe);
 
             res.cookie('access_token', token, {
                 httpOnly: false,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 2 * 60 * 60 * 1000
+                maxAge: 30 * 60 * 1000
             });
-            
+
+            const cookieExpiration = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
+
             res.cookie('refresh_token', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000
+                maxAge: cookieExpiration
             });
-
+            
             return res.status(200).json({token});
 
         } catch (error) {

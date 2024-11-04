@@ -1,4 +1,3 @@
-import { number, string } from "joi";
 import jwt from "jsonwebtoken";
 
 interface payload {
@@ -8,15 +7,18 @@ interface payload {
     userTheme: number;
 }
 
-export const tokenService = (payload: payload) => {
+export const tokenService = (payload: payload, rememberMe: boolean) => {
     const secretKey = process.env.SECRETKEY || 'your-secret-key';
 
-    const token = jwt.sign(payload,secretKey, {
-        expiresIn: '30m',
-    })
+    const accessTokenExpiration = '30m';
+    const refreshTokenExpiration = rememberMe ? '30d' : '7d';
 
+    const token = jwt.sign(payload,secretKey, {
+        expiresIn: accessTokenExpiration,
+    })
+    
     const refreshToken = jwt.sign(payload, secretKey, {
-        expiresIn: '7d',
+        expiresIn: refreshTokenExpiration,
     })
     return {
         token,
