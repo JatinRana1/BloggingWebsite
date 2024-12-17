@@ -7,7 +7,6 @@ const Home = () => {
             <Sidebar/>
             <div className="main-content">
                 <Navbar/>
-                
             </div>
         </div>
     )

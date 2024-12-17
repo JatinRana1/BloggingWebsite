@@ -11,7 +11,8 @@ const loginSchema = Joi.object({
 })
 
 export const adminController = {
-    login: async (req: Request, res: Response)=>{    
+    
+    login: async (req: Request, res: Response)=>{
         try {
             const { error, value } = loginSchema.validate(req.body);
 
@@ -70,4 +71,15 @@ export const adminController = {
             return res.status(500).json({message: "Internal Server Error"});
         }
     },
+
+    refreshToken: async (req: Request, res: Response)=> {
+        try {
+            console.log('hello world');
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({message: "Internal Server Error"});
+        }
+        
+    }
 }
+

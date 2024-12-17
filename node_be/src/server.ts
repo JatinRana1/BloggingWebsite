@@ -15,6 +15,11 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
+app.use((req,res,next)=> {
+    console.log(req.path);
+    console.log(req.method);
+    next();
+})
 
 // Routes
 app.use('/user', userRouter)
