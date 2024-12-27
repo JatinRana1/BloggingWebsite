@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectServer } from './connection/connectdb';
 import { userRouter } from './routes/userRouter';
+import { authMiddleware } from './middleware/authMiddleware';
 
 dotenv.config();
 
@@ -15,11 +16,11 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
-app.use((req,res,next)=> {
-    console.log(req.path);
-    console.log(req.method);
-    next();
-})
+// app.use((req,res,next)=> {
+//     console.log(req.path);
+//     console.log(req.method);
+//     next();
+// })
 
 // Routes
 app.use('/user', userRouter)

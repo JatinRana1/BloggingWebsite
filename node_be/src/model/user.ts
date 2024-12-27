@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         enum: [1, 2, 3, 4], // 1 = admin, 2 = editor, 3 = author, 4 = subscriber
         required: true,
     },
+    refreshToken: {
+        type: String,
+        required: false,
+    },
     status: {
         type: Number,
         enum: [1, 2, 3], // 1 = active, 2 = suspended, 3 = inactive

@@ -2,11 +2,11 @@ import { Response, Request } from "express"
 import { User } from "../model/user";
 import bcrypt from "bcrypt";
 import Joi from "joi";
-import { tokenService } from "../auth/tokenService";
+import { generateTokens, newRefreshToken } from "../auth/tokenService";
 
 const loginSchema = Joi.object({
     email: Joi.string().required(),
-    password: Joi.string().required(),
+    password: Joi.string().required(),  
     rememberMe: Joi.boolean(),
 })
 
@@ -37,7 +37,6 @@ export const adminController = {
             if(!isMatch){
                 return res.status(401).json({password: "Invalid credentials"});
             }
-
             
             const payload = {
                 userID: user.id,
@@ -46,25 +45,9 @@ export const adminController = {
                 userTheme: user.theme_preference,
             }
 
-            const {token, refreshToken} = tokenService(payload, rememberMe);
-
-            res.cookie('access_token', token, {
-                httpOnly: false,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 30 * 60 * 1000
-            });
-
-            const cookieExpiration = rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
-
-            res.cookie('refresh_token', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: cookieExpiration
-            });
+            const tokens = await generateTokens(payload, rememberMe);
             
-            return res.status(200).json({token});
+            return res.status(200).json(tokens);
 
         } catch (error) {
             console.log(error);
@@ -72,14 +55,22 @@ export const adminController = {
         }
     },
 
-    refreshToken: async (req: Request, res: Response)=> {
+    newAccessToken: async (req: Request, res: Response) => {
         try {
-            console.log('hello world');
+            const refreshToken = req.headers.authorization;
+            
+            if(!refreshToken){
+                return res.status(403).json({message: "Refresh Token Not Provided"})
+            }
+
+            const newAccessToken = newRefreshToken(refreshToken);
+            return res.status(200).json({ newAccessToken });
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({message: "Internal Server Error"});
         }
-        
-    }
+    },
+
 }
 
