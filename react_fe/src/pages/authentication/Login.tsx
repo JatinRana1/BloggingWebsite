@@ -2,14 +2,15 @@ import { useFormik } from "formik";
 import { loginSchema } from "../../schema/authSchema";
 import { login } from "../../api/api";
 import { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { setUser } from "../../slice/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setToken } from "../../slice/tokenSlice";
 
 const Login = () => {
     const navigator = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     interface formValues {
         email: string;
         password: string;
@@ -30,16 +31,15 @@ const Login = () => {
                 const data = await login(formData, {
                     withCredentials: true
                 })
+                const { accessToken, refreshToken } = data.data;
 
-                const token = data.data.token;
+                if(!accessToken || !refreshToken) throw new Error('Tokens not provided');
 
-                if (token) {
-                    const user = jwtDecode(token);
-                    sessionStorage.setItem('user', JSON.stringify(user));
-                    dispatch(setUser({ userData: user }));
-                    navigator('/');
-                }
-
+                dispatch(setToken({accessToken, refreshToken}));
+                
+                let user = jwtDecode(accessToken);
+                dispatch(setUser({ userData: user }));
+                navigator('/');
 
             } catch (error) {
                 const AxiosError = error as AxiosError

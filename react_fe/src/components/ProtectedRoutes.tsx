@@ -1,17 +1,22 @@
 import Cookies from 'js-cookie';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../hooks/hooks';
 
 interface ProtectedRoutesProps {
-  component: React.ElementType;
+  Component: React.ElementType;
   isProtected: boolean;
 }
 
-export const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ component: Component, isProtected }) => {
+export const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ Component, isProtected }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const access_token = Cookies.get('access_token');
-  const authenticated = Boolean(access_token);
+  const tokens = useAppSelector((state)=>state.token);
+  let authenticated : boolean = false;
+
+  if(tokens) {
+    authenticated = true;
+  }
 
   useEffect(() => {
     if (isProtected && !authenticated) {

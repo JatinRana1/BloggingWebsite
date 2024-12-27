@@ -1,18 +1,14 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setVisible } from "../slice/sidebarSlice";
-import { RootState } from "../store/store";
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+
 
 const Navbar = () => {
-    const dispatch = useDispatch();
-    const isVisible = useSelector((state: RootState)=> state.sidebar.isVisible);
-    const toggleSidebar = () => {
-        dispatch(setVisible({isVisible: !isVisible}))
-    }
+    const dispatch = useAppDispatch();
+    const userData  = useAppSelector((state)=> state.auth.userData);
+
     return(
         <div className="navbar col-12">
             <div className="left-side">
-                <div className="ham" onClick={toggleSidebar}>
+                <div className="ham">
                     <i className="ri-menu-line fs-5"></i>
                 </div>
                 <div className="search">
@@ -30,7 +26,7 @@ const Navbar = () => {
                     <img width={30} height={30} src="https://i.pinimg.com/736x/b8/80/70/b880708681403feb71d634c902b0afdd.jpg" alt="profile-pic" />
                 </div>
                 <div className="user-name">
-                    <span>Jatin Rana</span>
+                    <span>{ userData ? userData.userName : "Invalid User" }</span>
                 </div>
             </div>
         </div>

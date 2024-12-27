@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 
+const access_token = Cookies.get('access_token');
+
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASEURL || '',
   withCredentials: true
@@ -8,9 +10,8 @@ const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const token = Cookies.get('access_token');
-    if(token) {
-        config.headers.Authorization = `Bearer ${token}`
+    if(access_token) {
+        config.headers.Authorization = `Bearer ${access_token}`
     }
     return config;
   },
@@ -29,9 +30,11 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const { data } = await api.post('/user/refresh_token', {}, {withCredentials: true});
-        Cookies.set('access_token', data.newAccessToken);
-
+        let { data } = await api.post('/user/refresh_token', {access_token});
+        if(data.status){
+          originalRequest.headers['Authorization'] = `Bearer ${data.newAccessToken}`;
+          return api(originalRequest);
+        }
       } catch (error) {
         return Promise.reject(error);
       }
@@ -48,7 +51,8 @@ interface LoginData {
 }
 
 interface LoginResponse {
-  token: string
+  refreshToken: string;
+  accessToken: string;
 }
 
 export const login = (data: LoginData, headers: object) => {
